@@ -9,6 +9,8 @@
         <attr name="fletPaddingRight" format="reference|dimension" />
         <attr name="fletPaddingBottom" format="reference|dimension" />
         <attr name="fletBackground" format="reference|color" />
+        <attr name="fletCenterAlign" format="boolean" />
+        <attr name="fletEditTextPaddingBottom" format="reference|dimension" />
     </declare-styleable>
 
 </resources>

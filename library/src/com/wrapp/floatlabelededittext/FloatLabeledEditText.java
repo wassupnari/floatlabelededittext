@@ -33,7 +33,9 @@ public class FloatLabeledEditText extends FrameLayout {
 
     private Context mContext;
 
-        public FloatLabeledEditText(Context context) {
+    private int mEditTextPaddingBottom;
+
+    public FloatLabeledEditText(Context context) {
         super(context);
         mContext = context;
     }
@@ -44,7 +46,6 @@ public class FloatLabeledEditText extends FrameLayout {
         setAttributes(attrs);
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public FloatLabeledEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mContext = context;
@@ -63,6 +64,8 @@ public class FloatLabeledEditText extends FrameLayout {
         final int paddingRight = a.getDimensionPixelSize(R.styleable.FloatLabeledEditText_fletPaddingRight, 0);
         final int paddingBottom = a.getDimensionPixelSize(R.styleable.FloatLabeledEditText_fletPaddingBottom, 0);
         Drawable background = a.getDrawable(R.styleable.FloatLabeledEditText_fletBackground);
+        final boolean centerAlign = a.getBoolean(R.styleable.FloatLabeledEditText_fletCenterAlign, false);
+        mEditTextPaddingBottom = a.getDimensionPixelSize(R.styleable.FloatLabeledEditText_fletEditTextPaddingBottom, 0);
 
         if (padding != 0) {
             mHintTextView.setPadding(padding, padding, padding, padding);
@@ -80,7 +83,14 @@ public class FloatLabeledEditText extends FrameLayout {
         mHintTextView.setVisibility(INVISIBLE);
         AnimatorProxy.wrap(mHintTextView).setAlpha(0);
 
-        addView(mHintTextView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        mHintTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
+        if(centerAlign) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.CENTER_HORIZONTAL;
+            addView(mHintTextView, params);
+        } else {
+            addView(mHintTextView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        }
 
         a.recycle();
     }
@@ -102,8 +112,7 @@ public class FloatLabeledEditText extends FrameLayout {
             }
 
             final LayoutParams lp = new LayoutParams(params);
-            lp.gravity = Gravity.BOTTOM;
-            lp.topMargin = (int) (mHintTextView.getTextSize() + mHintTextView.getPaddingBottom() + mHintTextView.getPaddingTop());
+            lp.gravity = Gravity.CENTER_VERTICAL;
             params = lp;
 
             setEditText((EditText) child);
@@ -139,7 +148,7 @@ public class FloatLabeledEditText extends FrameLayout {
             }
         });
 
-        mHintTextView.setText(mEditText.getHint());
+        mHintTextView.setText(mEditText.getHint().toString().toUpperCase());
 
         if(!TextUtils.isEmpty(mEditText.getText())){
             mHintTextView.setVisibility(VISIBLE);
@@ -161,17 +170,19 @@ public class FloatLabeledEditText extends FrameLayout {
             animation = new AnimatorSet();
             ObjectAnimator move = ObjectAnimator.ofFloat(mHintTextView, "translationY", 0, mHintTextView.getHeight() / 8);
             ObjectAnimator fade = ObjectAnimator.ofFloat(mHintTextView, "alpha", 1, 0);
-            animation.playTogether(move, fade);
+            ObjectAnimator moveEditText = ObjectAnimator.ofFloat(mEditText, "translationY", mEditTextPaddingBottom, 0);
+            animation.playTogether(move, fade, moveEditText);
         } else if ((mHintTextView.getVisibility() != VISIBLE) && show) {
             animation = new AnimatorSet();
             ObjectAnimator move = ObjectAnimator.ofFloat(mHintTextView, "translationY", mHintTextView.getHeight() / 8, 0);
             ObjectAnimator fade;
+            ObjectAnimator moveEditText = ObjectAnimator.ofFloat(mEditText, "translationY", 0, mEditTextPaddingBottom);
             if (mEditText.isFocused()) {
                 fade = ObjectAnimator.ofFloat(mHintTextView, "alpha", 0, 1);
             } else {
                 fade = ObjectAnimator.ofFloat(mHintTextView, "alpha", 0, 0.33f);
             }
-            animation.playTogether(move, fade);
+            animation.playTogether(move, fade, moveEditText);
         }
 
         if (animation != null) {
@@ -199,11 +210,10 @@ public class FloatLabeledEditText extends FrameLayout {
 
     public void setHint(String hint) {
         mEditText.setHint(hint);
-        mHintTextView.setText(hint);
+        mHintTextView.setText(hint.toUpperCase());
     }
 
     public CharSequence getHint() {
         return mHintTextView.getHint();
     }
-
 }
