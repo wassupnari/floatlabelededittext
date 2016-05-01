@@ -148,7 +148,7 @@ public class FloatLabeledEditText extends FrameLayout {
             }
         });
 
-        mHintTextView.setText(mEditText.getHint().toString().toUpperCase());
+        mHintTextView.setText(mEditText.getHint().toString());
 
         if(!TextUtils.isEmpty(mEditText.getText())){
             mHintTextView.setVisibility(VISIBLE);
@@ -210,7 +210,7 @@ public class FloatLabeledEditText extends FrameLayout {
 
     public void setHint(String hint) {
         mEditText.setHint(hint);
-        mHintTextView.setText(hint.toUpperCase());
+        mHintTextView.setText(hint);
     }
 
     public CharSequence getHint() {
