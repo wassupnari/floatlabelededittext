@@ -1,11 +1,9 @@
+This project is forked from [wrapp/floatlabelededittext](https://github.com/wrapp/floatlabelededittext)
+
 Float Labeled EditText
 ==============
 
 Simple implementation of a Float Labeled EditText: An Android ViewGroup which uses a child EditText and puts the hint on top of the EditText when it is populated with text.
-
-iOS implementation by [@jverdi](http://www.twitter.com/jverdi): [JVFloatLabeledTextField](https://github.com/jverdi/JVFloatLabeledTextField) 
-
-Credits for the concept to Matt D. Smith ([@mds](http://www.twitter.com/mds)).
 
 ![Android Version](http://i.imgur.com/ucRd1jm.gif)
 
@@ -84,10 +82,26 @@ and then insert the view in XML:
             android:hint="Styled Hint"
             android:inputType="textPassword" />
     </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+    
+    <!-- Center text -->
+    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        float:fletPaddingBottom="10dp"
+        float:fletTextAppearance="@style/floatlabelededittext"
+        float:fletCenterAlign="true">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Styled Hint"
+            android:inputType="textPassword" />
+    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
 ```
 Developed By
 ============
 
+* Nari Shin [@wassupnari](https://twitter.com/wassupnari)
 * Henrik Sandström [@heinrisch](https://twitter.com/Heinrisch)
 
 Styled By
